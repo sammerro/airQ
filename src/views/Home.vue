@@ -1,18 +1,40 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js App" />
+  <div>
+    <h1>Check Quality of AI</h1>
+    <section>
+      <input type="text" v-model="city">
+      <button @click="getMeasurements()">LOAD</button>
+      {{promise}}
+      <p v-if="promise">.....</p>
+      <p>{{measurements}}</p>
+    </section>
+    {{city}}
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from "@/components/HelloWorld.vue";
-
+import axios from "axios";
 export default {
-  name: "home",
-  components: {
-    HelloWorld
+  name: "HomeView",
+  data() {
+    return {
+      city: undefined,
+      measurements: undefined,
+      promise: undefined
+    };
+  },
+  methods: {
+    async getMeasurements() {
+      this.promise = axios
+        .get(`https://api.openaq.org/v1/measurements?city=${this.city}`)
+        .then(x => x.data)
+        .catch(err => console.log(err));
+      console.log(this.promise);
+      this.measurements = await this.promise;
+      console.log("LLLLL");
+    }
   }
 };
 </script>
+
+<style lang="scss" scoped></style>
