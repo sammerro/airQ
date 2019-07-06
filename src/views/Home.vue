@@ -105,11 +105,11 @@ export default {
     groupedLatest() {
       if (this.flatLatestMeasurements) {
         const grouped = this.flatLatestMeasurements.reduce((acc, rec) => {
-          if (acc[rec.parameter] === undefined) {
-            acc[rec.parameter] = [];
-          }
           const lastUpdated = rec.lastUpdated;
           if (isToday(lastUpdated) || isYesterday(lastUpdated)) {
+            if (acc[rec.parameter] === undefined) {
+              acc[rec.parameter] = [];
+            }
             acc[rec.parameter].push(rec.value);
           }
           return acc;
@@ -119,6 +119,7 @@ export default {
       return null;
     },
     latestAvg() {
+      debugger;
       if (this.groupedLatest) {
         return objectMap(this.groupedLatest, avg);
       }
